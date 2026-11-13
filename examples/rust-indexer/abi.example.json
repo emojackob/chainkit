@@ -1,0 +1,4 @@
+[
+  {"type":"function","name":"set","inputs":[{"name":"value","type":"uint256"}],"outputs":[],"stateMutability":"nonpayable"},
+  {"type":"event","name":"Changed","inputs":[{"name":"value","type":"uint256","indexed":false}],"anonymous":false}
+]

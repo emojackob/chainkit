@@ -1,0 +1,29 @@
+name: Rust
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: make check
+      - run: bash packaging/build-release.sh
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y zstd
+          version=$(cargo metadata --no-deps --format-version 1 | python3 -c 'import json,sys; print(next(p["version"] for p in json.load(sys.stdin)["packages"] if p["name"]=="chainkit-indexer-cli"))')
+          bash packaging/build-packages.sh target/release/chainkit-indexer "$version" dist x86_64
+          dpkg-deb --info dist/*.deb
+          dpkg-deb --contents dist/*.deb
+          tar --zstd -tf dist/*.pkg.tar.zst
+          sudo apt-get install -y ./dist/chainkit-indexer_*_amd64.deb
+          /usr/bin/chainkit-indexer --version

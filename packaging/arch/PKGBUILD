@@ -1,0 +1,39 @@
+# Build from a versioned, locally checked-out Chainkit source tree.
+pkgname=chainkit-indexer
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Multi-project EVM contract indexing and evidence queries'
+arch=('x86_64' 'aarch64')
+url='https://github.com/emojackob/chainkit'
+depends=('glibc' 'gcc-libs')
+makedepends=('cargo')
+backup=('etc/chainkit-indexer/config.toml')
+# A standalone source archive is produced by the release workflow.
+source=("chainkit-indexer-${pkgver}.tar.gz::${url}/releases/download/chainkit-indexer-v${pkgver}/chainkit-indexer-${pkgver}-source.tar.gz")
+# Replace with the release checksum before publishing to AUR.
+sha256sums=('SKIP')
+
+prepare() {
+  [[ ${sha256sums[0]} != SKIP ]] || {
+    printf '%s\n' 'Set the exact release checksum before using or publishing this PKGBUILD.' >&2
+    return 1
+  }
+}
+
+build() {
+  cd "chainkit-indexer-${pkgver}"
+  bash packaging/build-release.sh
+}
+
+check() {
+  cd "chainkit-indexer-${pkgver}"
+  cargo test --locked --workspace
+}
+
+package() {
+  cd "chainkit-indexer-${pkgver}"
+  install -Dm755 target/release/chainkit-indexer "$pkgdir/usr/bin/chainkit-indexer"
+  install -Dm644 packaging/systemd/chainkit-indexer.service "$pkgdir/usr/lib/systemd/system/chainkit-indexer.service"
+  install -Dm644 examples/rust-indexer/config.example.toml "$pkgdir/etc/chainkit-indexer/config.toml"
+  install -Dm644 examples/rust-indexer/README.md "$pkgdir/usr/share/doc/chainkit-indexer/README.md"
+}

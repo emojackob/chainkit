@@ -1,0 +1,31 @@
+[package]
+name = "chainkit-indexer-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+description = "Standalone multi-project EVM indexer, HTTP API, and MCP server"
+
+[[bin]]
+name = "chainkit-indexer"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+axum.workspace = true
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+toml.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+chainkit-evm = { path = "../../crates/chainkit-evm", version = "0.1.0" }
+chainkit-abi = { path = "../../crates/chainkit-abi", version = "0.1.0" }
+chainkit-indexer = { path = "../../crates/chainkit-indexer", version = "0.1.0" }
+
+chainkit-api = { path = "../../crates/chainkit-api", version = "0.1.0" }
+
+[dev-dependencies]
+reqwest.workspace = true
+tempfile.workspace = true

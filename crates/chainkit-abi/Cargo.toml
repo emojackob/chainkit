@@ -1,0 +1,23 @@
+[package]
+name = "chainkit-abi"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+description = "Dynamic EVM ABI decoding and provider discovery for Chainkit"
+
+[dependencies]
+alloy-dyn-abi = "1.7.3"
+alloy-json-abi = "1.7.3"
+alloy-primitives = "1.7.3"
+hex.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+url.workspace = true
+
+[dev-dependencies]
+axum.workspace = true

@@ -1,0 +1,31 @@
+# Copy outside version control and set RPC endpoints for your networks.
+database = "chainkit.sqlite"
+listen = "127.0.0.1:8080"
+poll_interval_ms = 5000
+
+[chains]
+31337 = ["http://127.0.0.1:8545", "http://127.0.0.1:8546"]
+
+[scanner]
+confirmations = 12
+max_blocks = 20
+reorg_window = 256
+
+[rpc]
+max_attempts = 6
+timeout_ms = 15000
+total_timeout_ms = 60000
+max_response_bytes = 33554432
+base_backoff_ms = 100
+max_backoff_ms = 5000
+cooldown_ms = 1000
+max_in_flight_per_endpoint = 4
+requests_per_second = 10
+identity_ttl_ms = 300000
+# expected_genesis_hash = "0x..."
+
+[abi]
+sourcify_url = "https://sourcify.dev/server"
+# Etherscan is optional. Supply its key through CHAINKIT_ETHERSCAN_API_KEY.
+# etherscan_url = "https://api.etherscan.io/v2/api"
+timeout_ms = 15000

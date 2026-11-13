@@ -4,12 +4,22 @@
 
 Chainkit is a shared library that applications consume through versioned dependencies. Source code lives in one repository; modules are published independently as needed to make common capabilities reusable across applications.
 
-The first implemented modules are `chainkit-chain` and `chainkit-indexer`, providing EVM data acquisition, dynamic ABI decoding, and [contract indexing and transaction diagnostics](packages/backend/contract-indexer/README.md) with project isolation. Both Python packages can be embedded as dependencies; the indexer also provides a standalone HTTP service. Neither package has been published to a package registry. Other modules remain planned.
+The Rust workspace provides reusable EVM RPC pooling, ABI discovery and decoding, contract indexing, and HTTP/OpenAPI and stdio MCP adapters. The `chainkit-indexer` executable combines these libraries into a Linux service and CLI with SQLite persistence and multiple project registrations. Start with the [Rust integration example](examples/rust-indexer/README.md) and [architecture and coverage](docs/rust-architecture.md). See the [validation report](docs/rust-validation.md) for verified behavior and remaining release checks.
+
+The earlier Python `chainkit-chain` and `chainkit-indexer` packages remain available as a separate implementation and behavioral reference. See their [usage guide](packages/backend/contract-indexer/README.md). The Rust executable does not invoke Python. The Python and Rust database formats are separate and must not share the same database file. Packages have not been published to package registries.
 
 ## Repository structure
 
 ```text
 chainkit/
+  crates/
+    chainkit-evm/           # Bounded RPC pooling and chain identity
+    chainkit-abi/           # ABI discovery and dynamic decoding
+    chainkit-indexer/       # SQLite storage, indexing, and query engine
+    chainkit-api/           # HTTP, OpenAPI, and stdio MCP adapters
+  apps/
+    chainkit-indexer/       # Rust CLI and service executable
+  packaging/               # Debian/Arch packages and systemd integration
   packages/
     contracts/     # Reusable contracts
     chain/         # Onchain queries and transactions
@@ -49,10 +59,10 @@ Deployment addresses, network configuration, and deployment and upgrade history 
 
 ## Development status
 
-`chainkit-chain` and `chainkit-indexer` are at version `0.1.0` and have not been published to a package registry. Install them from local paths for now. Other directories describe planned module boundaries only.
+The Rust crates, executable, and earlier Python packages are at version `0.1.0`. Build Rust artifacts from this workspace; install Python packages from local paths. The contracts, wallet, UI, deployment, and general tooling modules are planned only.
 
 Future work includes live-node validation, redecoding without refetching chain data, shared acquisition, and scheduling and storage extensions. See each module's documentation for its actual interfaces, coverage, and limitations.
 
 ## Local validation
 
-Requires Python 3.11+. Run `make check` for syntax checks and deterministic tests, and `make indexer-help` for CLI help. See the [indexer documentation](packages/backend/contract-indexer/README.md) for integration steps and [examples/contract-indexer](examples/contract-indexer/README.md) for an application Makefile example.
+Rust requires version 1.90 or newer; the existing Python implementation requires Python 3.11+. Run `make check` for Rust formatting, linting, workspace tests, and Python checks. Run `make rust-test` or `make python-check` independently. Use `make rust-indexer-help` for the Rust CLI and `make indexer-help` for the Python CLI. See [examples/rust-indexer](examples/rust-indexer/README.md) for Rust configuration and [examples/contract-indexer](examples/contract-indexer/README.md) for the Python application Makefile example.

@@ -1,0 +1,29 @@
+[Unit]
+Description=Chainkit EVM contract indexer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+StateDirectory=chainkit-indexer
+WorkingDirectory=/var/lib/chainkit-indexer
+Environment=CHAINKIT_DATABASE=/var/lib/chainkit-indexer/index.sqlite
+EnvironmentFile=-/etc/chainkit-indexer/environment
+ExecStart=/usr/bin/chainkit-indexer --config /etc/chainkit-indexer/config.toml serve
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

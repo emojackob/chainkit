@@ -41,3 +41,8 @@ rpc-config.json
 .coverage
 htmlcov/
 .DS_Store
+
+# Rust build output and local operator configuration
+/target/
+/chainkit.toml
+/release/

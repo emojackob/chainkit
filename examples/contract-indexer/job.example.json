@@ -1,0 +1,6 @@
+{
+  "project": "demo",
+  "chain_id": 31337,
+  "address": "0x1111111111111111111111111111111111111111",
+  "database": "index.sqlite"
+}

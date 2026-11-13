@@ -1,0 +1,7 @@
+{
+  "chains": {"31337": ["http://127.0.0.1:8545"]},
+  "confirmations": 12,
+  "reorg_window": 256,
+  "poll_interval": 5,
+  "max_blocks_per_round": 20
+}
